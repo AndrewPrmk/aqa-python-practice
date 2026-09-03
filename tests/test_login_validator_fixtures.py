@@ -1,6 +1,7 @@
 import pytest
 from main import validate_login
 
+@pytest.mark.positive
 def test_successful_login(valid_login_data):
     result = validate_login(
         valid_login_data["email"],
@@ -11,6 +12,7 @@ def test_successful_login(valid_login_data):
     assert result["errors"] == {}
 
 
+@pytest.mark.negative
 def test_email_is_required(valid_login_data):
     data = valid_login_data.copy()
     data["email"] = ""
@@ -26,6 +28,7 @@ def test_email_is_required(valid_login_data):
     assert "remember_me" not in result["errors"]
 
 
+@pytest.mark.negative
 def test_password_is_required(valid_login_data):
     data = valid_login_data.copy()
     data["password"] = ""
@@ -48,6 +51,7 @@ def valid_data_without_email(valid_login_data):
     return data
 
 
+@pytest.mark.negative
 def test_login_data_without_email(valid_data_without_email):
     result = validate_login(
         valid_data_without_email["email"],
@@ -66,6 +70,7 @@ def login_data_with_short_password(valid_login_data):
     data["password"] = "123"
     return data
 
+@pytest.mark.negative
 def test_login_data_with_short_password(login_data_with_short_password):
     result = validate_login(
         login_data_with_short_password["email"],
@@ -78,6 +83,7 @@ def test_login_data_with_short_password(login_data_with_short_password):
     assert "remember_me" not in result["errors"]
 
 
+@pytest.mark.negative
 def test_invalid_login_data(invalid_login_data):
     result = validate_login(
         invalid_login_data["email"],
@@ -90,6 +96,7 @@ def test_invalid_login_data(invalid_login_data):
     assert result["errors"]["remember_me"] == "Remember me must be boolean"
 
 
+@pytest.mark.negative
 def test_invalid_password_data(invalid_password_data, valid_login_data):
     data = valid_login_data.copy()
     data["password"] = invalid_password_data["password"]
@@ -104,6 +111,7 @@ def test_invalid_password_data(invalid_password_data, valid_login_data):
     assert result["errors"]["password"] == invalid_password_data["expected_error"]
 
 
+@pytest.mark.negative
 def test_invalid_email_data(invalid_email_data, valid_login_data):
     data = valid_login_data.copy()
     data["email"] = invalid_email_data["email"]
@@ -120,6 +128,7 @@ def test_invalid_email_data(invalid_email_data, valid_login_data):
     assert "remember_me" not in result["errors"]
 
 
+@pytest.mark.negative
 def test_invalid_remember_me_data(invalid_remember_me_data, valid_login_data):
     data = valid_login_data.copy()
     data["remember_me"] = invalid_remember_me_data["remember_me"]

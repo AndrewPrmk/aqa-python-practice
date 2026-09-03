@@ -14,16 +14,23 @@
 - тесты в стиле AAA
 - параметризованные тесты
 - тесты с pytest fixtures
+- общие фикстуры в `conftest.py`
+- маркировка тестов через pytest markers
 
 ## Структура проекта
 
 ```text
 .
-├── main.py
-├── test_login_validator.py
-├── test_login_validator_AAA.py
-├── test_login_validator_fixtures.py
-├── test_login_validator_parametrize.py
+├── app/
+│   ├── __init__.py
+│   └── validators.py
+├── tests/
+│   ├── conftest.py
+│   ├── test_login_validator.py
+│   ├── test_login_validator_AAA.py
+│   ├── test_login_validator_fixtures.py
+│   └── test_login_validator_parametrize.py
+├── pytest.ini
 ├── .gitignore
 └── README.md
 ```
@@ -45,7 +52,19 @@ pytest
 Запустить конкретный файл:
 
 ```bash
-pytest test_login_validator_fixtures.py
+pytest tests/test_login_validator_fixtures.py
+```
+
+Запустить smoke-тесты:
+
+```bash
+pytest -m smoke
+```
+
+Запустить negative-тесты:
+
+```bash
+pytest -m negative
 ```
 
 ## Учебная цель
@@ -56,5 +75,7 @@ pytest test_login_validator_fixtures.py
 - использование `assert`;
 - параметризация через `pytest.mark.parametrize`;
 - работа с фикстурами;
+- работа с `conftest.py`;
+- запуск тестов по маркерам;
 - структура теста AAA;
 - чтение результатов запуска тестов.

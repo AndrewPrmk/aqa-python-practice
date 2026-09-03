@@ -1,5 +1,7 @@
+import pytest
 from main import validate_login
 
+@pytest.mark.negative
 def test_email_without_dog():
     email = "andrewyandex.ru"
     password = "12345678"
@@ -11,6 +13,7 @@ def test_email_without_dog():
     assert result["errors"]["email"] == "Email is invalid"
 
 
+@pytest.mark.negative
 def test_login_with_multiple_invalid_fields():
     email = ""
     password = "123"
@@ -24,6 +27,7 @@ def test_login_with_multiple_invalid_fields():
     assert result["errors"]["remember_me"] == "Remember me must be boolean"
 
 
+@pytest.mark.negative
 def test_email_is_required_but_remember_me_is_valid():
     email = ""
     password = "12345678"
