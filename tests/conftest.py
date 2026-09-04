@@ -58,3 +58,13 @@ def invalid_email_data(request):
 ])
 def invalid_remember_me_data(request):
     return request.param
+
+@pytest.fixture
+def valid_registration_data():
+    return {
+        "email": "andrew@yandex.ru",
+        "username": "andrew",
+        "password": "12345678",
+        "confirm_password": "12345678",
+        "accept_terms": True
+    }

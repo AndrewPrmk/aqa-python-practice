@@ -42,3 +42,17 @@ def test_password_boundary_values(password, expected_is_valid):
     result = validate_login("andrew@yandex.ru", password, True)
 
     assert result["is_valid"] is expected_is_valid
+
+
+@pytest.mark.parametrize(
+    "remember_me",
+    [
+        True,
+        False
+    ]
+)
+def test_remember_me_accepts_boolean_values(remember_me):
+    result = validate_login("andrew@yandex.ru", 12345678, remember_me)
+
+    assert result["is_valid"] is True
+    assert result["errors"] = {}
