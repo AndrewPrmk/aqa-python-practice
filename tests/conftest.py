@@ -1,5 +1,13 @@
 import pytest
 
+from tests.constants import (
+    EMAIL_INVALID_ERROR,
+    EMAIL_REQUIRED_ERROR,
+    PASSWORD_INVALID_ERROR,
+    PASSWORD_REQUIRED_ERROR,
+    REMEMBER_ME_TYPE_ERROR,
+)
+
 @pytest.fixture
 def valid_login_data():
     return {
@@ -19,11 +27,11 @@ def invalid_login_data():
 @pytest.fixture(params=[
     {
         "password": "",
-        "expected_error": "Password is required"
+        "expected_error": PASSWORD_REQUIRED_ERROR
     },
     {
         "password": "123",
-        "expected_error": "Password is invalid"
+        "expected_error": PASSWORD_INVALID_ERROR
     },
 ])
 def invalid_password_data(request):
@@ -32,11 +40,11 @@ def invalid_password_data(request):
 @pytest.fixture(params=[
     {
         "email": "",
-        "expected_error": "Email is required"
+        "expected_error": EMAIL_REQUIRED_ERROR
     },
     {
         "email": "andrewyandex.ru",
-        "expected_error": "Email is invalid"
+        "expected_error": EMAIL_INVALID_ERROR
     },
 ])
 def invalid_email_data(request):
@@ -45,15 +53,15 @@ def invalid_email_data(request):
 @pytest.fixture(params=[
     {
         "remember_me": "yes",
-        "expected_error": "Remember me must be boolean"
+        "expected_error": REMEMBER_ME_TYPE_ERROR
     },
     {
         "remember_me": 1,
-        "expected_error": "Remember me must be boolean"
+        "expected_error": REMEMBER_ME_TYPE_ERROR
     },
     {
         "remember_me": None,
-        "expected_error": "Remember me must be boolean"
+        "expected_error": REMEMBER_ME_TYPE_ERROR
     },
 ])
 def invalid_remember_me_data(request):

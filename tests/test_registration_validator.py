@@ -1,5 +1,13 @@
 import pytest
 from app.validators import validate_registration
+from tests.constants import (
+    ACCEPT_TERMS_INVALID_ERROR,
+    CONFIRM_PASSWORD_INVALID_ERROR,
+    CONFIRM_PASSWORD_REQUIRED_ERROR,
+    EMAIL_REQUIRED_ERROR,
+    PASSWORD_INVALID_ERROR,
+    USERNAME_INVALID_ERROR,
+)
 
 def validate_registration_with_data(data):
     return validate_registration(
@@ -61,8 +69,8 @@ def test_password_boundary_values(password, expected_is_valid, valid_registratio
 @pytest.mark.parametrize(
     "confirm_password, expected_error",
     [
-        ("", "Confirm password is required"),
-        ("different123", "Confirm password is invalid")
+        ("", CONFIRM_PASSWORD_REQUIRED_ERROR),
+        ("different123", CONFIRM_PASSWORD_INVALID_ERROR)
     ]
 )
 def test_confirm_password_validation(confirm_password, expected_error, valid_registration_data):
@@ -88,9 +96,9 @@ def test_confirm_password_validation(confirm_password, expected_error, valid_reg
 @pytest.mark.parametrize(
     "accept_terms, expected_error",
     [
-        (False, "Accept terms is invalid"),
-        (None, "Accept terms is invalid"),
-        ("yes", "Accept terms is invalid"),
+        (False, ACCEPT_TERMS_INVALID_ERROR),
+        (None, ACCEPT_TERMS_INVALID_ERROR),
+        ("yes", ACCEPT_TERMS_INVALID_ERROR),
     ]
 )
 def test_accept_terms_validation(accept_terms, expected_error, valid_registration_data):
@@ -141,8 +149,8 @@ def test_registration_with_multiple_invalid_fields(valid_registration_data):
     )
 
     assert result["is_valid"] is False
-    assert result["errors"]["email"] == "Email is required"
-    assert result["errors"]["username"] == "Username is invalid"
-    assert result["errors"]["password"] == "Password is invalid"
-    assert result["errors"]["confirm_password"] == "Confirm password is required"
-    assert result["errors"]["accept_terms"] == "Accept terms is invalid"
+    assert result["errors"]["email"] == EMAIL_REQUIRED_ERROR
+    assert result["errors"]["username"] == USERNAME_INVALID_ERROR
+    assert result["errors"]["password"] == PASSWORD_INVALID_ERROR
+    assert result["errors"]["confirm_password"] == CONFIRM_PASSWORD_REQUIRED_ERROR
+    assert result["errors"]["accept_terms"] == ACCEPT_TERMS_INVALID_ERROR

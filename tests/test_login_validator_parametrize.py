@@ -1,11 +1,19 @@
 import pytest
-from main import validate_login
+
+from app.validators import validate_login
+from tests.constants import (
+    EMAIL_INVALID_ERROR,
+    EMAIL_REQUIRED_ERROR,
+    PASSWORD_INVALID_ERROR,
+    PASSWORD_REQUIRED_ERROR,
+    REMEMBER_ME_TYPE_ERROR,
+)
 
 @pytest.mark.parametrize(
     "password, expected_error",
     [
-        ("", "Password is required"),
-        ("123", "Password is invalid")
+        ("", PASSWORD_REQUIRED_ERROR),
+        ("123", PASSWORD_INVALID_ERROR)
     ]
 )
 def test_invalid_password(password, expected_error):
@@ -18,9 +26,9 @@ def test_invalid_password(password, expected_error):
 @pytest.mark.parametrize(
     "remember_me, expected_error",
     [
-        ("yes", "Remember me must be boolean"),
-        (1, "Remember me must be boolean"),
-        (None, "Remember me must be boolean")
+        ("yes", REMEMBER_ME_TYPE_ERROR),
+        (1, REMEMBER_ME_TYPE_ERROR),
+        (None, REMEMBER_ME_TYPE_ERROR)
     ]
 )
 def test_invalid_type_remember_me(remember_me, expected_error):
@@ -52,7 +60,7 @@ def test_password_boundary_values(password, expected_is_valid):
     ]
 )
 def test_remember_me_accepts_boolean_values(remember_me):
-    result = validate_login("andrew@yandex.ru", 12345678, remember_me)
+    result = validate_login("andrew@yandex.ru", "12345678", remember_me)
 
     assert result["is_valid"] is True
-    assert result["errors"] = {}
+    assert result["errors"] == {}

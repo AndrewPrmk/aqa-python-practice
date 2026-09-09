@@ -1,5 +1,11 @@
 import pytest
-from main import validate_login
+from app.validators import validate_login
+from tests.constants import (
+    EMAIL_REQUIRED_ERROR,
+    PASSWORD_INVALID_ERROR,
+    PASSWORD_REQUIRED_ERROR,
+    REMEMBER_ME_TYPE_ERROR,
+)
 
 @pytest.mark.positive
 def test_successful_login(valid_login_data):
@@ -23,7 +29,7 @@ def test_email_is_required(valid_login_data):
         data["remember_me"],
     )
     assert result["is_valid"] is False
-    assert result["errors"]["email"] == "Email is required"
+    assert result["errors"]["email"] == EMAIL_REQUIRED_ERROR
     assert "password" not in result["errors"]
     assert "remember_me" not in result["errors"]
 
@@ -39,7 +45,7 @@ def test_password_is_required(valid_login_data):
         data["remember_me"],
     )
     assert result["is_valid"] is False
-    assert result["errors"]["password"] == "Password is required"
+    assert result["errors"]["password"] == PASSWORD_REQUIRED_ERROR
     assert "email" not in result["errors"]
     assert "remember_me" not in result["errors"]
 
@@ -59,7 +65,7 @@ def test_login_data_without_email(valid_data_without_email):
         valid_data_without_email["remember_me"]
     )
     assert result["is_valid"] is False
-    assert result["errors"]["email"] == "Email is required"
+    assert result["errors"]["email"] == EMAIL_REQUIRED_ERROR
     assert "password" not in result["errors"]
     assert "remember_me" not in result["errors"]
 
@@ -78,7 +84,7 @@ def test_login_data_with_short_password(login_data_with_short_password):
         login_data_with_short_password["remember_me"],
     )
     assert result["is_valid"] is False
-    assert result["errors"]["password"] == "Password is invalid"
+    assert result["errors"]["password"] == PASSWORD_INVALID_ERROR
     assert "email" not in result["errors"]
     assert "remember_me" not in result["errors"]
 
@@ -91,9 +97,9 @@ def test_invalid_login_data(invalid_login_data):
         invalid_login_data["remember_me"],
     )
     assert result["is_valid"] is False
-    assert result["errors"]["email"] == "Email is required"
-    assert result["errors"]["password"] == "Password is invalid"
-    assert result["errors"]["remember_me"] == "Remember me must be boolean"
+    assert result["errors"]["email"] == EMAIL_REQUIRED_ERROR
+    assert result["errors"]["password"] == PASSWORD_INVALID_ERROR
+    assert result["errors"]["remember_me"] == REMEMBER_ME_TYPE_ERROR
 
 
 @pytest.mark.negative
