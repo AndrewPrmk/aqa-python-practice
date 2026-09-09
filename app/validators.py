@@ -53,7 +53,7 @@ def validate_registration(email, username, password, confirm_password, accept_te
     if not username:
         errors["username"] = "Username is required"
     elif len(username) < 3 or len(username) > 20:
-        errors["usernae"] = "Username is invalid"
+        errors["username"] = "Username is invalid"
 
     if not password:
         errors["password"] = "Password is required"

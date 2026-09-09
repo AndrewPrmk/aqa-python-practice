@@ -1,6 +1,15 @@
 import pytest
 from app.validators import validate_registration
 
+def validate_registration_with_data(data):
+    return validate_registration(
+        data["email"],
+        data["username"],
+        data["password"],
+        data["confirm_password"],
+        data["accept_terms"],
+)
+
 @pytest.mark.parametrize(
     "username, expected_is_valid",
     [
@@ -104,45 +113,36 @@ def test_accept_terms_validation(accept_terms, expected_error, valid_registratio
     assert "confirm_password" not in result["errors"]
 
 
-
-
 @pytest.mark.smoke
 @pytest.mark.positive
 def test_successful_registration(valid_registration_data):
-    result = validate_registration(
-        valid_registration_data["email"],
-        valid_registration_data["username"],
-        valid_registration_data["password"],
-        valid_registration_data["confirm_password"],
-        valid_registration_data["accept_terms"],
-    )
+    result = validate_registration_with_data(valid_registration_data)
 
     assert result["is_valid"] is True
     assert result["errors"] == {}
 
+@pytest.mark.regression
+@pytest.mark.negative
+def test_registration_with_multiple_invalid_fields(valid_registration_data):
+    data = valid_registration_data.copy()
 
+    data["email"] = ""
+    data["username"] = "ab"
+    data["password"] = "123"
+    data["confirm_password"] = ""
+    data["accept_terms"] = False
 
+    result = validate_registration(
+        data["email"],
+        data["username"],
+        data["password"],
+        data["confirm_password"],
+        data["accept_terms"],
+    )
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    assert result["is_valid"] is False
+    assert result["errors"]["email"] == "Email is required"
+    assert result["errors"]["username"] == "Username is invalid"
+    assert result["errors"]["password"] == "Password is invalid"
+    assert result["errors"]["confirm_password"] == "Confirm password is required"
+    assert result["errors"]["accept_terms"] == "Accept terms is invalid"
